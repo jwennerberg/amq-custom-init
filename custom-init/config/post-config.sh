@@ -21,4 +21,5 @@ securitySettingPlugin="${securitySettingPlugin}         <setting name='readPermi
 securitySettingPlugin="${securitySettingPlugin}         <setting name='writePermissionValue' value='${LDAP_WRITE_PERMISSION_VALUE}'/>\n"
 securitySettingPlugin="${securitySettingPlugin}       </security-setting-plugin>\n\n"
 
-sed -i "s|<security-settings>|<security-settings>\n ${securitySettingPlugin}|g" ${CONFIG_INSTANCE_DIR}/etc/broker.xml
+sed -i -e "/<security-setting .*>/,/<\/security-setting>/d" -e "s|<security-settings>|<security-settings>\n ${securitySettingPlugin}|g" ${CONFIG_INSTANCE_DIR}/etc/broker.xml
+
