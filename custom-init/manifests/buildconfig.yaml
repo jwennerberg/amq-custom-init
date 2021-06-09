@@ -1,0 +1,41 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: amq-custom-init
+  name: amq-custom-init
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: amq-custom-init:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: custom-init
+    git:
+      uri: https://github.com/jwennerberg/amq-custom-init
+    type: Git
+  strategy:
+    dockerStrategy:
+      env:
+      - name: LDAP_CONNECTION_URL
+        valueFrom:
+          configMapKeyRef:
+            key: ldap-connection-url
+            name: amq-custom-init
+      - name: LDAP_DESTINATION_BASE
+        valueFrom:
+          configMapKeyRef:
+            key: ldap-destination-base
+            name: amq-custom-init
+      from:
+        kind: DockerImage
+        name: registry.redhat.io/amq7/amq-broker-init-rhel8:latest
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  triggers:
+  - type: ConfigChange

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: amq-custom-init
+data:
+  ldap-connection-url: ldaps://foo.bar:636/
+  ldap-destination-base: /foo/bar
